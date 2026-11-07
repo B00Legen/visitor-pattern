@@ -1,2 +1,2 @@
 # visitor-pattern
-Classroom assignment about strategy pattern implemented in Java.
+Classroom assignment about visitor pattern implemented in Java.
