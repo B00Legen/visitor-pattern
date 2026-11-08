@@ -6,33 +6,33 @@ import java.util.ArrayList;
 
 public class StatisticsVisitor implements Visitor {
 	private Stats stat;
-	private int curDepth;
+	private int currentDepth;
 	
 	@Override
-	public void visit(FileNode e) {
+	public void visit(FileNode file) {
 		stat.raiseFileCount();
-		stat.setMaxDepth(curDepth);
+		stat.setMaxDepth(currentDepth);
 	}
 	@Override
-	public void visit(DirectoryNode e) {
-		stat.raiseDirCount();
-		stat.setMaxDepth(curDepth);
+	public void visit(DirectoryNode directory) {
+		stat.raiseDirectoryCount();
+		stat.setMaxDepth(currentDepth);
 		
-		curDepth++;
+		currentDepth++;
 		
-		List<Element> child = e.getChildren();
-		for (Element cur : child) {
-			cur.accept(this);
+		List<Element> child = directory.getChildren();
+		for (Element current : child) {
+			current.accept(this);
 		}
 		
-		curDepth--;
+		currentDepth--;
 	}
 	
-	public Stats getStats(Element e) {
+	public Stats getStats(Element element) {
 		stat = new Stats();
-		curDepth = 0;
+		currentDepth = 0;
 		
-		e.accept(this);
+		element.accept(this);
 		
 		return stat;
 	}

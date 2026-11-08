@@ -2,12 +2,12 @@ package filesystem.visitors;
 
 public class Stats {
 	private final int fileCount;
-	private final int dirCount;
+	private final int directoryCount;
 	private final int maxDepth;
 
-	public Stats(int fileCount, int dirCount, int maxDepth) {
+	public Stats(int fileCount, int directoryCount, int maxDepth) {
 		this.fileCount = fileCount;
-		this.dirCount = dirCount;
+		this.directoryCount = directoryCount;
 		this.maxDepth = maxDepth;
 	}
 
@@ -18,11 +18,11 @@ public class Stats {
 		fileCount++;
 	}
 
-	public int getDirCount() {
-		return dirCount;
+	public int getDirectoryCount() {
+		return directoryCount;
 	}
-	public void raiseDirCount() {
-		dirCount++;
+	public void raiseDirectoryCount() {
+		directoryCount++;
 	}
 
 	public int getMaxDepth() {

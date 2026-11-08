@@ -15,16 +15,16 @@ class AutoTest {
 	void testDoubleDispatch() {
 		TestVisitor visitor = new TestVisitor();
 		FileNode file = new FileNode("example.txt", 10);
-		DirectoryNode dir = new DirectoryNode("docs");
+		DirectoryNode directory = new DirectoryNode("docs");
 		
 		file.accept(visitor);
 		assertTrue(visitor.fileVisit);
-		assertFalse(visitor.dirVisit);
+		assertFalse(visitor.directoryVisit);
 		
 		visitor.fileVisit = false;
 		
-		dir.accept(visitor);
-		assertTrue(visitor.dirVisit);
+		directory.accept(visitor);
+		assertTrue(visitor.directoryVisit);
 		assertFalse(visitor.fileVisit);
 	}
 	
@@ -59,12 +59,12 @@ class AutoTest {
 		root.addChild(new FileNode("bridges.txt", 200));
 		root.addChild(new FileNode("cats.mp4", 300));
 		
-		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals(List.of("/cats.mp4"), visitor.find(root, nameReq, 0));
+		Predicate<String> nameRequirements = name -> name.equals("cats.mp4");
+		assertEquals(List.of("/cats.mp4"), visitor.find(root, nameRequirements, 0));
 		
-		nameReq = name -> name.endsWith(".txt");
-		assertEquals(List.of("/analysis.txt", "/bridges.txt"), visitor.find(root, nameReq, 0));
-		assertEquals(List.of("/bridges.txt"), visitor.find(root, nameReq, 200));
+		nameRequirements = name -> name.endsWith(".txt");
+		assertEquals(List.of("/analysis.txt", "/bridges.txt"), visitor.find(root, nameRequirements, 0));
+		assertEquals(List.of("/bridges.txt"), visitor.find(root, nameRequirements, 200));
 	}
 	
 	@Test
@@ -82,12 +82,12 @@ class AutoTest {
 		
 		nested.addChild(new FileNode("cats.mp4", 300));
 		
-		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameReq, 0));
+		Predicate<String> nameRequirements = name -> name.equals("cats.mp4");
+		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameRequirements, 0));
 		
-		nameReq = name -> name.endsWith(".txt");
-		assertEquals(List.of("/analysis.txt", "/Folder/bridges.txt"), visitor.find(root, nameReq, 0));
-		assertEquals(List.of("/Folder/bridges.txt"), visitor.find(root, nameReq, 200));
+		nameRequirements = name -> name.endsWith(".txt");
+		assertEquals(List.of("/analysis.txt", "/Folder/bridges.txt"), visitor.find(root, nameRequirements, 0));
+		assertEquals(List.of("/Folder/bridges.txt"), visitor.find(root, nameRequirements, 200));
 	}
 	
 	@Test
@@ -101,10 +101,10 @@ class AutoTest {
 		folder.addChild(nested);
 		nested.addChild(new FileNode("cats.mp4", 300));
 		
-		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameReq, 0));
-		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameReq, 0));
-		assertEquals(List.of("/Folder/Nested/cats.mp4"), visitor.find(root, nameReq, 0));
+		Predicate<String> nameRequirements = name -> name.equals("cats.mp4");
+		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameRequirements, 0));
+		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameRequirements, 0));
+		assertEquals(List.of("/Folder/Nested/cats.mp4"), visitor.find(root, nameRequirements, 0));
 	}
 	
 	@Test
@@ -120,30 +120,30 @@ class AutoTest {
 		folder.addChild(new FileNode("bridges.txt", 200));
 		folder.addChild(nested);
 		
-		Stats ans = new Stats(2, 3, 2);
-		Stats res = visitor.getStats(root);
-		assertEquals(ans.getFileCount(), res.getFileCount());
-		assertEquals(ans.getDirCount(), res.getDirCount());
-		assertEquals(ans.getMaxDepth(), res.getMaxDepth());
+		Stats answer = new Stats(2, 3, 2);
+		Stats result = visitor.getStats(root);
+		assertEquals(answer.getFileCount(), result.getFileCount());
+		assertEquals(answer.getDirectoryCount(), result.getDirectoryCount());
+		assertEquals(answer.getMaxDepth(), result.getMaxDepth());
 	}
 	
 	@Test
 	void testEmptyStructures() {
 		DirectoryNode root = new DirectoryNode("Root");
-		TotalSizeVisitor vSize = new TotalSizeVisitor();
-		SearchVisitor vSearch = new SearchVisitor();
-		StatisticsVisitor vStats = new StatisticsVisitor();
+		TotalSizeVisitor visitorSize = new TotalSizeVisitor();
+		SearchVisitor visitorSearch = new SearchVisitor();
+		StatisticsVisitor visitorStats = new StatisticsVisitor();
 		
-		assertEquals(0, vSize.getSize(root));
+		assertEquals(0, visitorSize.getSize(root));
 		
-		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals(List.of(), vSearch.find(root, nameReq, 0));
+		Predicate<String> nameRequirements = name -> name.equals("cats.mp4");
+		assertEquals(List.of(), visitorSearch.find(root, nameRequirements, 0));
 		
-		Stats ans = new Stats(0, 1, 0);
-		Stats res = vStats.getStats(root);
-		assertEquals(ans.getFileCount(), res.getFileCount());
-		assertEquals(ans.getDirCount(), res.getDirCount());
-		assertEquals(ans.getMaxDepth(), res.getMaxDepth());
+		Stats answer = new Stats(0, 1, 0);
+		Stats result = visitorStats.getStats(root);
+		assertEquals(answer.getFileCount(), result.getFileCount());
+		assertEquals(answer.getDirectoryCount(), result.getDirectoryCount());
+		assertEquals(answer.getMaxDepth(), result.getMaxDepth());
 	}
 	
 	@Test
@@ -153,8 +153,8 @@ class AutoTest {
 		
 		root.addChild(new FileNode("cats.mp4", 100));
 		
-		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals(List.of(), visitor.find(root, nameReq, 200));
+		Predicate<String> nameRequirements = name -> name.equals("cats.mp4");
+		assertEquals(List.of(), visitor.find(root, nameRequirements, 200));
 	}
 	
 	@Test
@@ -162,9 +162,9 @@ class AutoTest {
 		DirectoryNode root = new DirectoryNode("Root");
 		DirectoryNode folder = new DirectoryNode("Folder");
 		DirectoryNode nested = new DirectoryNode("Nested");
-		TotalSizeVisitor vSize = new TotalSizeVisitor();
-		SearchVisitor vSearch = new SearchVisitor();
-		StatisticsVisitor vStats = new StatisticsVisitor();
+		TotalSizeVisitor visitorSize = new TotalSizeVisitor();
+		SearchVisitor visitorSearch = new SearchVisitor();
+		StatisticsVisitor visitorStats = new StatisticsVisitor();
 		
 		root.addChild(new FileNode("analysis.txt", 100));
 		root.addChild(folder);
@@ -174,22 +174,22 @@ class AutoTest {
 		
 		nested.addChild(new FileNode("cats.mp4", 300));
 		
-		assertEquals(500, vSize.getSize(folder));
-		assertEquals(500, vSize.getSize(folder));
+		assertEquals(500, visitorSize.getSize(folder));
+		assertEquals(500, visitorSize.getSize(folder));
 		
-		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals(List.of("/Nested/cats.mp4"), vSearch.find(folder, nameReq, 0));
-		assertEquals(List.of("/Nested/cats.mp4"), vSearch.find(folder, nameReq, 0));
+		Predicate<String> nameRequirements = name -> name.equals("cats.mp4");
+		assertEquals(List.of("/Nested/cats.mp4"), visitorSearch.find(folder, nameRequirements, 0));
+		assertEquals(List.of("/Nested/cats.mp4"), visitorSearch.find(folder, nameRequirements, 0));
 		
-		Stats ans = new Stats(3, 3, 3);
-		Stats res = vStats.getStats(root);
-		assertEquals(ans.getFileCount(), res.getFileCount());
-		assertEquals(ans.getDirCount(), res.getDirCount());
-		assertEquals(ans.getMaxDepth(), res.getMaxDepth());
+		Stats answer = new Stats(3, 3, 3);
+		Stats result = visitorStats.getStats(root);
+		assertEquals(answer.getFileCount(), result.getFileCount());
+		assertEquals(answer.getDirectoryCount(), result.getDirectoryCount());
+		assertEquals(answer.getMaxDepth(), result.getMaxDepth());
 		
-		assertEquals(ans.getFileCount(), res.getFileCount());
-		assertEquals(ans.getDirCount(), res.getDirCount());
-		assertEquals(ans.getMaxDepth(), res.getMaxDepth());
+		assertEquals(answer.getFileCount(), result.getFileCount());
+		assertEquals(answer.getDirectoryCount(), result.getDirectoryCount());
+		assertEquals(answer.getMaxDepth(), result.getMaxDepth());
 	}
 	
 	@Test
@@ -197,9 +197,6 @@ class AutoTest {
 		DirectoryNode root = new DirectoryNode("Root");
 		DirectoryNode folder = new DirectoryNode("Folder");
 		DirectoryNode nested = new DirectoryNode("Nested");
-		TotalSizeVisitor vSize = new TotalSizeVisitor();
-		SearchVisitor vSearch = new SearchVisitor();
-		StatisticsVisitor vStats = new StatisticsVisitor();
 		
 		root.addChild(new FileNode("analysis.txt", 100));
 		root.addChild(folder);

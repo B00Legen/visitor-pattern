@@ -6,39 +6,39 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class SearchVisitor implements Visitor {
-	private Predicate<String> nameReq;
-	private Predicate<Integer> sizeReq;
-	private String curDir;
-	private List<String> res = new ArrayList<>();
+	private Predicate<String> nameRequirements;
+	private Predicate<Integer> sizeRequirements;
+	private String currentDirectory;
+	private List<String> result = new ArrayList<>();
 	
 	@Override
-	public void visit(FileNode e) {
-		String name = e.getName();
-		int size = e.getSize();
+	public void visit(FileNode element) {
+		String name = element.getName();
+		int size = element.getSize();
 		
-		if (nameReq.test(name) && sizeReq.test(size)) {
-			res.add(curDir);
+		if (nameRequirements.test(name) && sizeRequirements.test(size)) {
+			result.add(currentDirectory);
 		}
 	}
 	@Override
-	public void visit(DirectoryNode e) {
-		List<Element> child = e.getChildren();
-		for (Element cur : child) {
-			curDir += "/" + cur.getName();
-			cur.accept(this);
-			curDir = curDir.replace("/" + cur.getName(), "");
+	public void visit(DirectoryNode directory) {
+		List<Element> child = directory.getChildren();
+		for (Element current : child) {
+			currentDirectory += "/" + current.getName();
+			current.accept(this);
+			currentDirectory = currentDirectory.replace("/" + current.getName(), "");
 		}
 	}
 	
-	public List<String> find(Element e, Predicate<String> name, int minSize) {
-		nameReq = name;
-		sizeReq = (n -> n >= minSize);
-		curDir = "";
-		res.clear();
+	public List<String> find(Element element, Predicate<String> nameRequirements, int minimumSize) {
+		this.nameRequirements = nameRequirements;
+		sizeRequirements = (n -> n >= minimumSize);
+		currentDirectory = "";
+		result.clear();
 		
-		e.accept(this);
+		element.accept(this);
 		
-		res.sort();
-		return res;
+		result.sort();
+		return result;
 	}
 }

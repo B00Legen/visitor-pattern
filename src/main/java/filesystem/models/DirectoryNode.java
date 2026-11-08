@@ -11,32 +11,32 @@ public class DirectoryNode extends BaseElement{
 		this.name = name;
 	}
 	
-	public void addChild(Element el) {
-		for (Element cur : children) {
-			if (cur.getName().equals(el.getName())) {
+	public void addChild(Element element) {
+		for (Element current : children) {
+			if (current.getName().equals(element.getName())) {
 				throw new IllegalArgumentException("Duplicate sibling name");
 			}
 		}
 		
-		if (el.getParent() != null) {
+		if (element.getParent() != null) {
 			throw new IllegalArgumentException("Element already has a parent");
 		}
 		
-		DirectoryNode cur = this;
-		while (cur != null) {
-			if (cur == el) {
+		DirectoryNode current = this;
+		while (current != null) {
+			if (current == element) {
 				throw new IllegalArgumentException("Cycle detected");
 			}
 			
-			cur = cur.getParent();
+			current = current.getParent();
 		}
 		
-		children.add(el);
-		el.setParent(this);
+		children.add(element);
+		element.setParent(this);
 	}
-	public void removeChild(Element el) {
-		if (children.remove(el)) {
-			el.setParent(null);
+	public void removeChild(Element element) {
+		if (children.remove(element)) {
+			element.setParent(null);
 		}
 	}
 	public List<Element> getChildren() {
@@ -44,7 +44,7 @@ public class DirectoryNode extends BaseElement{
 	}
 	
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public void accept(Visitor visitor) {
+		visitor.visit(this);
 	}
 }
