@@ -1,0 +1,20 @@
+public class FileNode implements Element {
+	private String name;
+	private int size = 0;
+	
+	public FileNode(String name, int size) {
+		if (size < 0) {
+			throw new IllegalArgumentException("Negative size");
+		}
+		
+		this.name = name;
+		this.size = size;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public int getSize() {
+		return size;
+	}
+}
