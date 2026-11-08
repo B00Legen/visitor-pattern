@@ -38,6 +38,7 @@ public class SearchVisitor implements Visitor {
 		
 		e.accept(this);
 		
+		res.sort();
 		return res;
 	}
 }
