@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class StatisticsVisitor implements Visitor {
-	private int fileCount, dirCount, maxDepth, curDepth;
+	private Stats stat;
+	private int curDepth;
 	
 	@Override
 	public void visit(FileNode e) {
-		fileCount++;
-		maxDepth = Math.max(curDepth, maxDepth);
+		stat.raiseFileCount();
+		stat.setMaxDepth(curDepth);
 	}
 	@Override
 	public void visit(DirectoryNode e) {
-		dirCount++;
-		maxDepth = Math.max(curDepth, maxDepth);
+		stat.raiseDirCount();
+		stat.setMaxDepth(curDepth);
 		
 		curDepth++;
 		
@@ -28,13 +29,11 @@ public class StatisticsVisitor implements Visitor {
 	}
 	
 	public Stats getStats(Element e) {
-		fileCount = 0;
-		dirCount = 0;
+		stat = new Stats();
 		curDepth = 0;
-		maxDepth = 0;
 		
 		e.accept(this);
 		
-		return new Stats(fileCount, dirCount, maxDepth);
+		return stat;
 	}
 }

@@ -14,12 +14,21 @@ public class Stats {
 	public int getFileCount() {
 		return fileCount;
 	}
+	public void raiseFileCount() {
+		fileCount++;
+	}
 
 	public int getDirCount() {
 		return dirCount;
 	}
+	public void raiseDirCount() {
+		dirCount++;
+	}
 
 	public int getMaxDepth() {
 		return maxDepth;
+	}
+	public void setMaxDepth(int depth) {
+		maxDepth = Math.max(depth, maxDepth);
 	}
 }
