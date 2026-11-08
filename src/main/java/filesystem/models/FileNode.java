@@ -17,4 +17,9 @@ public class FileNode implements Element {
 	public int getSize() {
 		return size;
 	}
+	
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

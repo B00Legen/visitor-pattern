@@ -29,4 +29,9 @@ public class DirectoryNode implements Element{
 	public Element[] getChildren() {
 		return children;
 	}
+	
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this)
+	}
 }
