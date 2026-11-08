@@ -19,7 +19,7 @@ public class TotalSizeVisitor implements Visitor {
 		}
 	}
 	
-	public long getSize(Element e) {
+	public int getSize(Element e) {
 		size = 0;
 		e.accept(this);
 		return size;
