@@ -1,3 +1,7 @@
+package filesystem.visitors;
+
+import filesystem.models.*;
+
 public class TestVisitor implements Visitor {
 	public boolean fileVisit = false, dirVisit = false;
 	

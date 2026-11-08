@@ -1,3 +1,9 @@
+package filesystem.visitors;
+
+import filesystem.models.*;
+import java.util.List;
+import java.util.ArrayList;
+
 public class TotalSizeVisitor implements Visitor {
 	private int size = 0;
 	
@@ -9,7 +15,7 @@ public class TotalSizeVisitor implements Visitor {
 	}
 	@Override
 	public void visit(DirectoryNode e) {
-		Element[] child = e.getChildren();
+		List<Element> child = e.getChildren();
 		for (Element cur : child) {
 			cur.accept(this);
 		}

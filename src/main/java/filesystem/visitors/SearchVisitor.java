@@ -1,7 +1,15 @@
+package filesystem.visitors;
+
+import filesystem.models.*;
+import java.util.function.Predicate;
+import java.util.List;
+import java.util.ArrayList;
+
 public class SearchVisitor implements Visitor {
 	private Predicate<String> nameReq;
-	private Predicate<long> sizeReq;
-	private String res, curDir;
+	private Predicate<Integer> sizeReq;
+	private String curDir;
+	private List<String> res = new ArrayList<>();
 	
 	@Override
 	public void visit(FileNode e) {
@@ -9,24 +17,24 @@ public class SearchVisitor implements Visitor {
 		int size = e.getSize();
 		
 		if (nameReq.test(name) && sizeReq.test(size)) {
-			res = curDir;
+			res.add(curDir);
 		}
 	}
 	@Override
 	public void visit(DirectoryNode e) {
-		Element[] child = e.getChildren();
+		List<Element> child = e.getChildren();
 		for (Element cur : child) {
-			curDir += "/" + e.getName();
+			curDir += "/" + cur.getName();
 			cur.accept(this);
-			curDir.replace("/" + e.getName(), "");
+			curDir = curDir.replace("/" + cur.getName(), "");
 		}
 	}
 	
-	public String find(Element e, Predicate<String> name, long minSize) {
+	public List<String> find(Element e, Predicate<String> name, int minSize) {
 		nameReq = name;
-		sizeReq = size -> size >= minSize;
-		res = "";
-		curDir = e.getName();
+		sizeReq = (n -> n >= minSize);
+		curDir = "";
+		res.clear();
 		
 		e.accept(this);
 		

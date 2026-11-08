@@ -1,5 +1,11 @@
 package filesystem;
 
+import filesystem.visitors.*;
+import filesystem.models.*;
+import java.util.function.Predicate;
+import java.util.List;
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,11 +60,11 @@ class AutoTest {
 		root.addChild(new FileNode("cats.mp4", 300));
 		
 		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals("Root/cats.mp4", visitor.find(folder, nameReq, 0));
+		assertEquals(List.of("/cats.mp4"), visitor.find(root, nameReq, 0));
 		
 		nameReq = name -> name.endsWith(".txt");
-		assertEquals("Root/analysis.txt", visitor.find(root, nameReq, 0));
-		assertEquals("Root/bridges.txt", visitor.find(root, nameReq, 200));
+		assertEquals(List.of("/analysis.txt", "/bridges.txt"), visitor.find(root, nameReq, 0));
+		assertEquals(List.of("/bridges.txt"), visitor.find(root, nameReq, 200));
 	}
 	
 	@Test
@@ -77,11 +83,11 @@ class AutoTest {
 		nested.addChild(new FileNode("cats.mp4", 300));
 		
 		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals("Folder/Nested/cats.mp4", visitor.find(folder, nameReq, 0));
+		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameReq, 0));
 		
 		nameReq = name -> name.endsWith(".txt");
-		assertEquals("Root/analysis.txt", visitor.find(root, nameReq, 0));
-		assertEquals("Root/Folder/bridges.txt", visitor.find(root, nameReq, 200));
+		assertEquals(List.of("/analysis.txt", "/Folder/bridges.txt"), visitor.find(root, nameReq, 0));
+		assertEquals(List.of("/Folder/bridges.txt"), visitor.find(root, nameReq, 200));
 	}
 	
 	@Test
@@ -96,9 +102,9 @@ class AutoTest {
 		nested.addChild(new FileNode("cats.mp4", 300));
 		
 		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals("Folder/Nested/cats.mp4", visitor.find(folder, nameReq, 0));
-		assertEquals("Folder/Nested/cats.mp4", visitor.find(folder, nameReq, 0));
-		assertEquals("Root/Folder/Nested/cats.mp4", visitor.find(root, nameReq, 0));
+		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameReq, 0));
+		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameReq, 0));
+		assertEquals(List.of("/Folder/Nested/cats.mp4"), visitor.find(root, nameReq, 0));
 	}
 	
 	@Test
@@ -115,7 +121,7 @@ class AutoTest {
 		assertEquals(0, vSize.getSize(root));
 		
 		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals("", vSearch.find(root, nameReq, 0));
+		assertEquals(List.of(), vSearch.find(root, nameReq, 0));
 	}
 	
 	@Test
@@ -126,7 +132,7 @@ class AutoTest {
 		root.addChild(new FileNode("cats.mp4", 100));
 		
 		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals("", visitor.find(root, nameReq, 200));
+		assertEquals(List.of(), visitor.find(root, nameReq, 200));
 	}
 	
 	@Test
@@ -145,12 +151,12 @@ class AutoTest {
 		
 		nested.addChild(new FileNode("cats.mp4", 300));
 		
-		assertEquals(500, vSize(folder));
-		assertEquals(500, vSize(folder));
+		assertEquals(500, vSize.getSize(folder));
+		assertEquals(500, vSize.getSize(folder));
 		
 		Predicate<String> nameReq = name -> name.equals("cats.mp4");
-		assertEquals("Folder/Nested/cats.mp4", vSearch.find(folder, nameReq, 0));
-		assertEquals("Folder/Nested/cats.mp4", vSearch.find(folder, nameReq, 0));
+		assertEquals(List.of("/Nested/cats.mp4"), vSearch.find(folder, nameReq, 0));
+		assertEquals(List.of("/Nested/cats.mp4"), vSearch.find(folder, nameReq, 0));
 	}
 	
 	@Test

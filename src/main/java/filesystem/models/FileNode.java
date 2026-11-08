@@ -1,3 +1,7 @@
+package filesystem.models;
+
+import filesystem.visitors.Visitor;
+
 public class FileNode implements Element {
 	private String name;
 	private int size = 0;
@@ -11,9 +15,6 @@ public class FileNode implements Element {
 		this.size = size;
 	}
 	
-	public String getName() {
-		return name;
-	}
 	public int getSize() {
 		return size;
 	}
@@ -21,5 +22,9 @@ public class FileNode implements Element {
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);
+	}
+	@Override
+	public String getName() {
+		return name;
 	}
 }
