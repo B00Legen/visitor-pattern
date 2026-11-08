@@ -1,9 +1,9 @@
 package filesystem.visitors;
 
 public class Stats {
-	private final int fileCount;
-	private final int directoryCount;
-	private final int maxDepth;
+	private int fileCount;
+	private int directoryCount;
+	private int maxDepth;
 
 	public Stats(int fileCount, int directoryCount, int maxDepth) {
 		this.fileCount = fileCount;

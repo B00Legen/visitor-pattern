@@ -29,7 +29,7 @@ public class StatisticsVisitor implements Visitor {
 	}
 	
 	public Stats getStats(Element element) {
-		stat = new Stats();
+		stat = new Stats(0, 0, 0);
 		currentDepth = 0;
 		
 		element.accept(this);

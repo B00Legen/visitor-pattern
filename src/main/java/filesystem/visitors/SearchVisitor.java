@@ -38,7 +38,7 @@ public class SearchVisitor implements Visitor {
 		
 		element.accept(this);
 		
-		result.sort();
+		result.sort(null);
 		return result;
 	}
 }

@@ -86,7 +86,7 @@ class AutoTest {
 		assertEquals(List.of("/Nested/cats.mp4"), visitor.find(folder, nameRequirements, 0));
 		
 		nameRequirements = name -> name.endsWith(".txt");
-		assertEquals(List.of("/analysis.txt", "/Folder/bridges.txt"), visitor.find(root, nameRequirements, 0));
+		assertEquals(List.of("/Folder/bridges.txt", "/analysis.txt"), visitor.find(root, nameRequirements, 0));
 		assertEquals(List.of("/Folder/bridges.txt"), visitor.find(root, nameRequirements, 200));
 	}
 	
