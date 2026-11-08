@@ -11,7 +11,7 @@ public class DirectoryNode extends BaseElement{
 		this.name = name;
 	}
 	
-	public void addChild(Element element) {
+	private boolean check(Element element) {
 		for (Element current : children) {
 			if (current.getName().equals(element.getName())) {
 				throw new IllegalArgumentException("Duplicate sibling name");
@@ -31,8 +31,14 @@ public class DirectoryNode extends BaseElement{
 			current = current.getParent();
 		}
 		
-		children.add(element);
-		element.setParent(this);
+		return true;
+	}
+	
+	public void addChild(Element element) {
+		if (check(element)) {
+			children.add(element);
+			element.setParent(this);
+		}
 	}
 	public void removeChild(Element element) {
 		if (children.remove(element)) {

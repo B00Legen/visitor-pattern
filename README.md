@@ -1,2 +1,5 @@
-# visitor-pattern
+# Visitor Pattern
 Classroom assignment about visitor pattern implemented in Java.
+### How to run
+1. Go to project location with `cd` command.
+2. Execute `mvn test`.
