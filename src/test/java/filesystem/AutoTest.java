@@ -194,6 +194,31 @@ class AutoTest {
 	
 	@Test
 	void testInvalidMutations() {
+		DirectoryNode root = new DirectoryNode("Root");
+		DirectoryNode folder = new DirectoryNode("Folder");
+		DirectoryNode nested = new DirectoryNode("Nested");
+		TotalSizeVisitor vSize = new TotalSizeVisitor();
+		SearchVisitor vSearch = new SearchVisitor();
+		StatisticsVisitor vStats = new StatisticsVisitor();
 		
+		root.addChild(new FileNode("analysis.txt", 100));
+		root.addChild(folder);
+		
+		folder.addChild(new FileNode("bridges.txt", 200));
+		folder.addChild(nested);
+		
+		nested.addChild(new FileNode("cats.mp4", 300));
+		
+		assertThrows(IllegalArgumentException.class, () -> { // loop
+			nested.addChild(root);
+		});
+		
+		assertThrows(IllegalArgumentException.class, () -> { // sibling filename duplicate
+			nested.addChild(new FileNode("cats.mp4", 100));
+		});
+		
+		assertThrows(IllegalArgumentException.class, () -> { // multiple parents
+			root.addChild(nested);
+		});
 	}
 }

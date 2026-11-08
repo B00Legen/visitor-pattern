@@ -2,9 +2,8 @@ package filesystem.models;
 
 import filesystem.visitors.Visitor;
 
-public class FileNode implements Element {
-	private String name;
-	private int size = 0;
+public class FileNode extends BaseElement {
+	private int size;
 	
 	public FileNode(String name, int size) {
 		if (size < 0) {
@@ -22,9 +21,5 @@ public class FileNode implements Element {
 	@Override
 	public void accept(Visitor v) {
 		v.visit(this);
-	}
-	@Override
-	public String getName() {
-		return name;
 	}
 }
