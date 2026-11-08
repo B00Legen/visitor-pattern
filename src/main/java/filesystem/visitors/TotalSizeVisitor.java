@@ -7,8 +7,6 @@ import java.util.ArrayList;
 public class TotalSizeVisitor implements Visitor {
 	private int size = 0;
 	
-	public TotalSizeVisitor() {}
-	
 	@Override
 	public void visit(FileNode e) {
 		size += e.getSize();

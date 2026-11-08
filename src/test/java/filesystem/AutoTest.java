@@ -109,7 +109,22 @@ class AutoTest {
 	
 	@Test
 	void testStatisticsNested() {
+		DirectoryNode root = new DirectoryNode("Root");
+		DirectoryNode folder = new DirectoryNode("Folder");
+		DirectoryNode nested = new DirectoryNode("Nested");
+		StatisticsVisitor visitor = new StatisticsVisitor();
 		
+		root.addChild(new FileNode("analysis.txt", 100));
+		root.addChild(folder);
+		
+		folder.addChild(new FileNode("bridges.txt", 200));
+		folder.addChild(nested);
+		
+		Stats ans = new Stats(2, 3, 2);
+		Stats res = visitor.getStats(root);
+		assertEquals(ans.getFileCount(), res.getFileCount());
+		assertEquals(ans.getDirCount(), res.getDirCount());
+		assertEquals(ans.getMaxDepth(), res.getMaxDepth());
 	}
 	
 	@Test
@@ -117,11 +132,18 @@ class AutoTest {
 		DirectoryNode root = new DirectoryNode("Root");
 		TotalSizeVisitor vSize = new TotalSizeVisitor();
 		SearchVisitor vSearch = new SearchVisitor();
+		StatisticsVisitor vStats = new StatisticsVisitor();
 		
 		assertEquals(0, vSize.getSize(root));
 		
 		Predicate<String> nameReq = name -> name.equals("cats.mp4");
 		assertEquals(List.of(), vSearch.find(root, nameReq, 0));
+		
+		Stats ans = new Stats(0, 1, 0);
+		Stats res = vStats.getStats(root);
+		assertEquals(ans.getFileCount(), res.getFileCount());
+		assertEquals(ans.getDirCount(), res.getDirCount());
+		assertEquals(ans.getMaxDepth(), res.getMaxDepth());
 	}
 	
 	@Test
@@ -142,6 +164,7 @@ class AutoTest {
 		DirectoryNode nested = new DirectoryNode("Nested");
 		TotalSizeVisitor vSize = new TotalSizeVisitor();
 		SearchVisitor vSearch = new SearchVisitor();
+		StatisticsVisitor vStats = new StatisticsVisitor();
 		
 		root.addChild(new FileNode("analysis.txt", 100));
 		root.addChild(folder);
@@ -157,6 +180,16 @@ class AutoTest {
 		Predicate<String> nameReq = name -> name.equals("cats.mp4");
 		assertEquals(List.of("/Nested/cats.mp4"), vSearch.find(folder, nameReq, 0));
 		assertEquals(List.of("/Nested/cats.mp4"), vSearch.find(folder, nameReq, 0));
+		
+		Stats ans = new Stats(3, 3, 3);
+		Stats res = vStats.getStats(root);
+		assertEquals(ans.getFileCount(), res.getFileCount());
+		assertEquals(ans.getDirCount(), res.getDirCount());
+		assertEquals(ans.getMaxDepth(), res.getMaxDepth());
+		
+		assertEquals(ans.getFileCount(), res.getFileCount());
+		assertEquals(ans.getDirCount(), res.getDirCount());
+		assertEquals(ans.getMaxDepth(), res.getMaxDepth());
 	}
 	
 	@Test
