@@ -31,4 +31,11 @@ public class Stats {
 	public void setMaxDepth(int depth) {
 		maxDepth = Math.max(depth, maxDepth);
 	}
+	
+	@Override
+	public String toString() {
+		return "Stats{" + fileCount + " files, "
+						+ directoryCount + " directories, "
+						+ maxDepth + " max depth}";
+	}
 }
